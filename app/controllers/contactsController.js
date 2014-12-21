@@ -43,7 +43,7 @@
         $scope.deleteContact = function(contactId) {
             contactsFactory.deleteContact(contactId)
                 .success(function(status) {
-                   . if (status) {
+                    if (status) {
                         for (var i=0,len=$scope.contacts.length;i<len;i++) {
                             if ($scope.contacts[i].id === contactId) {
                                $scope.contacts.splice(i,1);

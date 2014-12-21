@@ -17,9 +17,7 @@
         factory.addContact = function(user) {
             $http.post('api/add_user', user)
         }
-        factory.getOrders = function() {
-            return $http.get('/orders');
-        }
+
 
         factory.deleteContact = function(contactId) {
             return $http.delete('/contacts/' + contactId);

@@ -1,30 +1,34 @@
 <?php
 
-require 'Slim/Slim.php';
+require __DIR__.'/../vendor/autoload.php';
 
-$app = new Slim();
+$app = new Slim\Slim();
+
 $app->get('/users', 'getUsers');
 $app->get('/users/:id', 'getUser');
 $app->post('/add_user', 'addUser');
 $app->put('/users/:id', 'updateUser');
 $app->delete('/users/:id', 'deleteUser');
-
-
+$app->get('/test', 'getUsers2');
 $app->run();
 
+
 function getUsers() {
-	$sql = "select * FROM users ORDER BY id";
+
 	try {
-		$db = getConnection();
-		$stmt = $db->query($sql);  
-		$wines = $stmt->fetchAll(PDO::FETCH_OBJ);
-		$db = null;
-		echo json_encode($wines);
+		$contacts = User::all();
+
+		echo json_encode($contacts);
 	} catch(PDOException $e) {
-		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+		echo '{"error":{"text":'. $e->getMessage() .'}}';
 	}
 }
 
+function getUsers2() {
+	$contacts = User::all();
+
+	echo json_encode($contacts);
+}
 function getUser($id) {
 	$sql = "select * FROM users WHERE id=".$id." ORDER BY id";
 	try {
@@ -100,5 +104,4 @@ function getConnection() {
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	return $dbh;
 }
-
 ?>
