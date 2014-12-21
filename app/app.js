@@ -1,20 +1,71 @@
-// Declare app level module which depends on filters, and services
-angular.module('Ozmon', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date'])
-  .config(['$routeProvider', function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'app/views/home/home.html',
-        controller: 'HomeController'})
-        .when('/customers', {
-          controller: 'CustomersController',
-          templateUrl: 'app/views/customers.html'
-        })
-        .when('/orders/:customerId', {
-          controller: 'OrdersController',
-          templateUrl: 'app/views/orders.html'
-        })
-      .otherwise({redirectTo: '/'});
-  }]);
+(function() {
+  var app = angular.module('OzMonApp', ['ngRoute']);
+  app.config(function($routeProvider) {
+    $routeProvider.
+        when('/', {
+          templateUrl: 'app/views/home.html',
+          controller: 'ContactsController'
+        }).
+        when('/contacts/', {
+          controller: 'ContactsController',
+          templateUrl: 'app/views/contacts/lists.html'
+        }).
+        when('/contacts/add-user', {
+          controller: AddCtrl,
+          templateUrl: 'app/views/contacts/add-new.html'
+        }).
+        when('/contacts/edit/:id', {
+          templateUrl: 'app/views/contacts/edit.html',
+          controller: EditCtrl
+        }).
+        otherwise({redirectTo: '/'});
+  });
 
 
 
+  function AddCtrl($scope, $http, $location) {
+    $scope.master = {};
+    $scope.activePath = null;
+
+    $scope.add_new = function(user, AddNewForm) {
+
+      $http.post('api/add_user', user).success(function(){
+        $scope.reset();
+        $scope.activePath = $location.path('/contacts/');
+      });
+
+      $scope.reset = function() {
+        $scope.user = angular.copy($scope.master);
+      };
+
+      $scope.reset();
+
+    };
+  }
+
+  function EditCtrl($scope, $http, $location, $routeParams) {
+    var id = $routeParams.id;
+    $scope.activePath = null;
+
+    $http.get('api/users/'+id).success(function(data) {
+      $scope.users = data;
+    });
+
+    $scope.update = function(user){
+      $http.put('api/users/'+id, user).success(function(data) {
+        $scope.users = data;
+        $scope.activePath = $location.path('/contacts/');
+      });
+    };
+
+    $scope.delete = function(user) {
+      console.log(user);
+
+      var deleteUser = confirm('Are you absolutely sure you want to delete?');
+      if (deleteUser) {
+        $http.delete('api/users/'+user.id);
+        $scope.activePath = $location.path('/contacts/');
+      }
+    };
+  }
+}());
