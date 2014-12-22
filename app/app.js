@@ -16,7 +16,7 @@
         }).
         when('/contacts/edit/:id', {
           templateUrl: 'app/views/contacts/edit.html',
-          controller: EditCtrl
+          controller: 'ContactsController'
         }).
         otherwise({redirectTo: '/'});
   });

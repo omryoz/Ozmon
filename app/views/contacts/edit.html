@@ -1,7 +1,7 @@
 <h2>Edit user</h2>
 <div class="row">
   <div class="col-md-6">
-  <form novalidate ng-repeat="user in users" name="AddNewForm" id="add-new-form" method="post" action="">
+  <form novalidate ng-repeat="user in contacts" name="AddNewForm" id="add-new-form" method="post" action="">
     <input type="hidden" ng-model="user.id" value="{{user.id}}" />
     <div class="form-group">
       <label for="username">Username:</label>
@@ -20,7 +20,7 @@
       <input class="form-control" type="text" ng-model="user.address" value="{{user.address}}" />
     </div>
     <button class="btn btn-primary" ng-disabled="AddNewForm.$invalid || isUnchanged(user)" id="add-new-btn" ng-click="update(user)">Update <span class="glyphicon glyphicon-floppy-disk"></span></button>
-    <button class="btn btn-danger" ng-click="delete(user)">Delete <span class="glyphicon glyphicon-trash"></span></button>
+    <button class="btn btn-danger" ng-click="deleteContact(user)">Delete <span class="glyphicon glyphicon-trash"></span></button>
     <a href="#/contacts/" class="btn">Cancel</a>
   </form>
 </div>

@@ -12,7 +12,7 @@
         };
 
         factory.getContact = function(contactId) {
-            return $http.get('/contacts/' + contactId);
+            return $http.get('api/users/' + contactId);
         };
         factory.addContact = function(user) {
             $http.post('api/add_user', user)
@@ -20,7 +20,7 @@
 
 
         factory.deleteContact = function(contactId) {
-            return $http.delete('/contacts/' + contactId);
+            return $http.delete('api/users/'+contactId);
         }
 
         return factory;

@@ -30,13 +30,9 @@ function getUsers2() {
 	echo json_encode($contacts);
 }
 function getUser($id) {
-	$sql = "select * FROM users WHERE id=".$id." ORDER BY id";
 	try {
-		$db = getConnection();
-		$stmt = $db->query($sql);  
-		$wines = $stmt->fetchAll(PDO::FETCH_OBJ);
-		$db = null;
-		echo json_encode($wines);
+		$contact = User::find($id);
+		echo json_encode($contact);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
@@ -83,13 +79,10 @@ function updateUser($id) {
 }
 
 function deleteUser($id) {
-	$sql = "DELETE FROM users WHERE id=".$id;
+
 	try {
-		$db = getConnection();
-		$stmt = $db->query($sql);  
-		$wines = $stmt->fetchAll(PDO::FETCH_OBJ);
-		$db = null;
-		echo json_encode($wines);
+		$user = User::find($id);
+		echo json_encode($user->delete());
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}

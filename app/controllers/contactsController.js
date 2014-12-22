@@ -1,14 +1,14 @@
 (function() {
     
-    var ContactsController = function ($scope, $log, $window, contactsFactory) {
+    var ContactsController = function ($scope, $routeParams, $log, $window, contactsFactory) {
         $scope.sortBy = 'name';
         $scope.reverse = false;
         $scope.master = {};
         $scope.activePath = null;
         $scope.contacts = [];
-
-        
+        var contactid = (typeof $routeParams.id != 'undefined') ? $routeParams.id : null ;
         function init() {
+            if (contactid == null) {
             contactsFactory.getContacts()
                 .success(function(contacts) {
                     $scope.contacts = contacts;
@@ -16,6 +16,16 @@
                 .error(function(data, status, headers, config) {
                     $log.log(data.error + ' ' + status);
                 });
+            }
+            else {
+                contactsFactory.getContact(contactid)
+                    .success(function(contacts) {
+                        $scope.contacts.push(contacts);
+                    })
+                    .error(function(data, status, headers, config) {
+                        $log.log(data.error + ' ' + status);
+                    });
+            }
 
 
         }
@@ -39,30 +49,20 @@
            $scope.sortBy = propName;
            $scope.reverse = !$scope.reverse;
         };
+        $scope.deleteContact = function(user) {
+              console.log(user);
+              var deleteUser = confirm('Are you absolutely sure you want to delete?');
+              if (deleteUser) {
+                  contactsFactory.deleteContact()
+                      .success(function(contacts) {
+                          $scope.activePath = $location.path('/contacts/');
+                  })
+              }
+            };
 
-        $scope.deleteContact = function(contactId) {
-            contactsFactory.deleteContact(contactId)
-                .success(function(status) {
-                    if (status) {
-                        for (var i=0,len=$scope.contacts.length;i<len;i++) {
-                            if ($scope.contacts[i].id === contactId) {
-                               $scope.contacts.splice(i,1);
-                               break;
-                            }
-                        }  
-                    }
-                    else {
-                        $window.alert('Unable to delete contact');   
-                    }
-                    
-                })
-                .error(function(data, status, headers, config) {
-                    $log.log(data.error + ' ' + status);
-                });
-        };
     };
     
-    ContactsController.$inject = ['$scope', '$log', '$window', 'contactsFactory'];
+    ContactsController.$inject = ['$scope', '$routeParams', '$log', '$window', 'contactsFactory'];
 
     angular.module('OzMonApp')
       .controller('ContactsController', ContactsController);
