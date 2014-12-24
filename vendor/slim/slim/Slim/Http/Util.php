@@ -401,7 +401,7 @@ class Util
         $header = rtrim($header, "\r\n");
         $headerPieces = preg_split('@\s*[;,]\s*@', $header);
         foreach ($headerPieces as $c) {
-            $cParts = explode('=', $c, 2);
+            $cParts = explode('=', $c);
             if (count($cParts) === 2) {
                 $key = urldecode($cParts[0]);
                 $value = urldecode($cParts[1]);

@@ -335,20 +335,16 @@ class Slim
      */
     public function config($name, $value = null)
     {
-        $c = $this->container;
-
-        if (is_array($name)) {
-            if (true === $value) {
-                $c['settings'] = array_merge_recursive($c['settings'], $name);
+        if (func_num_args() === 1) {
+            if (is_array($name)) {
+                $this->settings = array_merge($this->settings, $name);
             } else {
-                $c['settings'] = array_merge($c['settings'], $name);
+                return isset($this->settings[$name]) ? $this->settings[$name] : null;
             }
-        } elseif (func_num_args() === 1) {
-            return isset($c['settings'][$name]) ? $c['settings'][$name] : null;
         } else {
-            $settings = $c['settings'];
+            $settings = $this->settings;
             $settings[$name] = $value;
-            $c['settings'] = $settings;
+            $this->settings = $settings;
         }
     }
 
@@ -1099,18 +1095,6 @@ class Slim
         $this->response->redirect($url, $status);
         $this->halt($status);
     }
-    
-    /**
-     * RedirectTo
-     * 
-     * Redirects to a specific named route
-     * 
-     * @param string    $route      The route name
-     * @param array     $params     Associative array of URL parameters and replacement values
-     */
-    public function redirectTo($route, $params = array(), $status = 302){
-        $this->redirect($this->urlFor($route, $params), $status);
-    }
 
     /********************************************************************************
     * Flash Messages
@@ -1249,10 +1233,6 @@ class Slim
      */
     public function add(\Slim\Middleware $newMiddleware)
     {
-        if(in_array($newMiddleware, $this->middleware)) {
-            $middleware_class = get_class($newMiddleware);
-            throw new \RuntimeException("Circular Middleware setup detected. Tried to queue the same Middleware instance ({$middleware_class}) twice.");
-        }
         $newMiddleware->setApplication($this);
         $newMiddleware->setNextMiddleware($this->middleware[0]);
         array_unshift($this->middleware, $newMiddleware);
@@ -1311,8 +1291,6 @@ class Slim
             echo $body;
         }
 
-        $this->applyHook('slim.after');
-
         restore_error_handler();
     }
 
@@ -1351,6 +1329,7 @@ class Slim
             $this->stop();
         } catch (\Slim\Exception\Stop $e) {
             $this->response()->write(ob_get_clean());
+            $this->applyHook('slim.after');
         } catch (\Exception $e) {
             if ($this->config('debug')) {
                 throw $e;

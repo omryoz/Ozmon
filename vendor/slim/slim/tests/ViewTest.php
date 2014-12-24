@@ -162,8 +162,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
     public function testSetTemplatesDirectory()
     {
         $view = new \Slim\View();
-        $directory = 'templates' . DIRECTORY_SEPARATOR;
-        $view->setTemplatesDirectory($directory); // <-- Should strip trailing slash
+        $view->setTemplatesDirectory('templates/'); // <-- Should strip trailing slash
 
         $this->assertAttributeEquals('templates', 'templatesDirectory', $view);
     }

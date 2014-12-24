@@ -19,7 +19,7 @@
       <label for="address">Address:</label>
       <input class="form-control" type="text" ng-model="user.address" value="{{user.address}}" />
     </div>
-    <button class="btn btn-primary" ng-disabled="AddNewForm.$invalid || isUnchanged(user)" id="add-new-btn" ng-click="update(user)">Update <span class="glyphicon glyphicon-floppy-disk"></span></button>
+    <button class="btn btn-primary" ng-disabled="AddNewForm.$invalid || isUnchanged(user)" id="add-new-btn" ng-click="updateContact(user)">Update <span class="glyphicon glyphicon-floppy-disk"></span></button>
     <button class="btn btn-danger" ng-click="deleteContact(user)">Delete <span class="glyphicon glyphicon-trash"></span></button>
     <a href="#/contacts/" class="btn">Cancel</a>
   </form>

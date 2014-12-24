@@ -6,6 +6,13 @@ use Illuminate\Database\Schema\Blueprint;
 class PostgresGrammar extends Grammar {
 
 	/**
+	 * The keyword identifier wrapper format.
+	 *
+	 * @var string
+	 */
+	protected $wrapper = '"%s"';
+
+	/**
 	 * The possible column modifiers.
 	 *
 	 * @var array
@@ -386,7 +393,7 @@ class PostgresGrammar extends Grammar {
 	{
 		$allowed = array_map(function($a) { return "'".$a."'"; }, $column->allowed);
 
-		return "varchar(255) check (\"{$column->name}\" in (".implode(', ', $allowed)."))";
+		return "varchar(255) check ({$column->name} in (".implode(', ', $allowed)."))";
 	}
 
 	/**

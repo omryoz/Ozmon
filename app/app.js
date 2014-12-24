@@ -11,7 +11,7 @@
           templateUrl: 'app/views/contacts/lists.html'
         }).
         when('/contacts/add-user', {
-          controller: AddCtrl,
+          controller: 'ContactsController',
           templateUrl: 'app/views/contacts/add-new.html'
         }).
         when('/contacts/edit/:id', {

@@ -1,8 +1,17 @@
 <?php
 
-require __DIR__.'/../vendor/autoload.php';
+//require __DIR__.'../vendor/autoload.php';
 
-$app = new Slim\Slim();
+//$app = new Slim\Slim();
+//use \Slim\Slim AS Slim;
+//$app = new Slim();
+
+
+require __DIR__.'/../vendor/autoload.php';
+use \Slim\Slim AS Slim;
+$app = new Slim();
+//$app = new Slim\Slim();
+
 
 $app->get('/users', 'getUsers');
 $app->get('/users/:id', 'getUser');
@@ -18,21 +27,27 @@ function getUsers() {
 	try {
 		$contacts = User::all();
 
-		echo json_encode($contacts);
+		echo ($contacts);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}';
 	}
 }
 
 function getUsers2() {
-	$contacts = User::all();
 
-	echo json_encode($contacts);
+    try {
+        $contacts = User::all();
+
+
+    		echo $contacts;
+    	} catch(PDOException $e) {
+    		echo '{"error":{"text":'. $e->getMessage() .'}}';
+    	}
 }
 function getUser($id) {
-	try {
+    try {
 		$contact = User::find($id);
-		echo json_encode($contact);
+		echo ($contact);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
@@ -40,21 +55,13 @@ function getUser($id) {
 
 function addUser() {
 	$request = Slim::getInstance()->request();
-	$user = json_decode($request->getBody());
-	$sql = "INSERT INTO users (username, first_name, last_name, address) VALUES (:username, :first_name, :last_name, :address)";
+	$userData = json_decode($request->getBody(),true);
+
 	try {
-		$db = getConnection();
-		$stmt = $db->prepare($sql);  
-		$stmt->bindParam("username", $user->username);
-		$stmt->bindParam("first_name", $user->first_name);
-		$stmt->bindParam("last_name", $user->last_name);
-		$stmt->bindParam("address", $user->address);
-		$stmt->execute();
-		$user->id = $db->lastInsertId();
-		$db = null;
-		echo json_encode($user); 
+		$user = User::create($userData);
+		echo $user;
 	} catch(PDOException $e) {
-		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+		echo '{"error":{"text":'. $e->getMessage() .'}}';
 	}
 }
 
@@ -64,7 +71,7 @@ function updateUser($id) {
 	$sql = "UPDATE users SET username=:username, first_name=:first_name, last_name=:last_name, address=:address WHERE id=:id";
 	try {
 		$db = getConnection();
-		$stmt = $db->prepare($sql);  
+		$stmt = $db->prepare($sql);
 		$stmt->bindParam("username", $user->username);
 		$stmt->bindParam("first_name", $user->first_name);
 		$stmt->bindParam("last_name", $user->last_name);
@@ -72,9 +79,9 @@ function updateUser($id) {
 		$stmt->bindParam("id", $id);
 		$stmt->execute();
 		$db = null;
-		echo json_encode($user); 
+		echo json_encode($user);
 	} catch(PDOException $e) {
-		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+		echo '{"error":{"text":'. $e->getMessage() .'}}';
 	}
 }
 
@@ -82,7 +89,7 @@ function deleteUser($id) {
 
 	try {
 		$user = User::find($id);
-		echo json_encode($user->delete());
+		echo $user->delete();
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}

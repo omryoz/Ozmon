@@ -1,17 +1,22 @@
 <?php namespace Illuminate\Database\Capsule;
 
 use PDO;
+use Illuminate\Support\Fluent;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Container\Container;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Support\Traits\CapsuleManagerTrait;
 
 class Manager {
 
-	use CapsuleManagerTrait;
+	/**
+	 * The current globally used instance.
+	 *
+	 * @var \Illuminate\Database\Capsule\Manager
+	 */
+	protected static $instance;
 
 	/**
 	 * The database manager instance.
@@ -23,7 +28,7 @@ class Manager {
 	/**
 	 * Create a new database capsule manager.
 	 *
-	 * @param  \Illuminate\Container\Container|null  $container
+	 * @param  \Illuminate\Container\Container  $container
 	 * @return void
 	 */
 	public function __construct(Container $container = null)
@@ -36,6 +41,19 @@ class Manager {
 		$this->setupDefaultConfiguration();
 
 		$this->setupManager();
+	}
+
+	/**
+	 * Setup the IoC container instance.
+	 *
+	 * @param  \Illuminate\Container\Container  $container
+	 * @return void
+	 */
+	protected function setupContainer($container)
+	{
+		$this->container = $container ?: new Container;
+
+		$this->container->instance('config', new Fluent);
 	}
 
 	/**
@@ -145,7 +163,7 @@ class Manager {
 	 * Set the fetch mode for the database connections.
 	 *
 	 * @param  int  $fetchMode
-	 * @return $this
+	 * @return \Illuminate\Database\Capsule\Manager
 	 */
 	public function setFetchMode($fetchMode)
 	{
@@ -155,9 +173,19 @@ class Manager {
 	}
 
 	/**
+	 * Make this capsule instance available globally.
+	 *
+	 * @return void
+	 */
+	public function setAsGlobal()
+	{
+		static::$instance = $this;
+	}
+
+	/**
 	 * Get the database manager instance.
 	 *
-	 * @return \Illuminate\Database\DatabaseManager
+	 * @return \Illuminate\Database\Manager
 	 */
 	public function getDatabaseManager()
 	{
@@ -191,7 +219,7 @@ class Manager {
 	/**
 	 * Get the current cache manager instance.
 	 *
-	 * @return \Illuminate\Cache\CacheManager
+	 * @return \Illuminate\Cache\Manager
 	 */
 	public function getCacheManager()
 	{
@@ -210,6 +238,27 @@ class Manager {
 	public function setCacheManager(CacheManager $cache)
 	{
 		$this->container->instance('cache', $cache);
+	}
+
+	/**
+	 * Get the IoC container instance.
+	 *
+	 * @return \Illuminate\Container\Container
+	 */
+	public function getContainer()
+	{
+		return $this->container;
+	}
+
+	/**
+	 * Set the IoC container instance.
+	 *
+	 * @param  \Illuminate\Container\Container  $container
+	 * @return void
+	 */
+	public function setContainer(Container $container)
+	{
+		$this->container = $container;
 	}
 
 	/**

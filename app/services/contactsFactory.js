@@ -15,13 +15,21 @@
             return $http.get('api/users/' + contactId);
         };
         factory.addContact = function(user) {
-            $http.post('api/add_user', user)
-        }
+            //return $http.post('api/add_user', user)
+            return $http({
+                method: 'POST',
+                url: 'api/add_user',
+                data: user
+            });
+        };
+        factory.updateContact = function(id, user) {
+            return $http.put('api/test/'+id, user );
 
+        };
 
         factory.deleteContact = function(contactId) {
-            return $http.delete('api/users/'+contactId);
-        }
+            $http.delete('api/users/'+contactId);
+        };
 
         return factory;
     };

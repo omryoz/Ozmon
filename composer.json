@@ -1,6 +1,6 @@
 {
     "require": {
-        "slim/slim": "2.*",
+        "slim/slim": "2.4.2",
         "illuminate/database": "*"
     },
     "autoload": {

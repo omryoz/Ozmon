@@ -6,6 +6,13 @@ use Illuminate\Database\Grammar as BaseGrammar;
 class Grammar extends BaseGrammar {
 
 	/**
+	 * The keyword identifier wrapper format.
+	 *
+	 * @var string
+	 */
+	protected $wrapper = '"%s"';
+
+	/**
 	 * The components that make up a select clause.
 	 *
 	 * @var array
@@ -140,13 +147,6 @@ class Grammar extends BaseGrammar {
 			foreach ($join->clauses as $clause)
 			{
 				$clauses[] = $this->compileJoinConstraint($clause);
-			}
-
-			foreach ($join->bindings as $index => $binding)
-			{
-				unset($join->bindings[$index]);
-
-				$query->addBinding($binding, 'join');
 			}
 
 			// Once we have constructed the clauses, we'll need to take the boolean connector
@@ -378,57 +378,6 @@ class Grammar extends BaseGrammar {
 	}
 
 	/**
-	 * Compile a "where day" clause.
-	 *
-	 * @param  \Illuminate\Database\Query\Builder  $query
-	 * @param  array  $where
-	 * @return string
-	 */
-	protected function whereDay(Builder $query, $where)
-	{
-		return $this->dateBasedWhere('day', $query, $where);
-	}
-
-	/**
-	 * Compile a "where month" clause.
-	 *
-	 * @param  \Illuminate\Database\Query\Builder  $query
-	 * @param  array  $where
-	 * @return string
-	 */
-	protected function whereMonth(Builder $query, $where)
-	{
-		return $this->dateBasedWhere('month', $query, $where);
-	}
-
-	/**
-	 * Compile a "where year" clause.
-	 *
-	 * @param  \Illuminate\Database\Query\Builder  $query
-	 * @param  array  $where
-	 * @return string
-	 */
-	protected function whereYear(Builder $query, $where)
-	{
-		return $this->dateBasedWhere('year', $query, $where);
-	}
-
-	/**
-	 * Compile a date based where clause.
-	 *
-	 * @param  string  $type
-	 * @param  \Illuminate\Database\Query\Builder  $query
-	 * @param  array  $where
-	 * @return string
-	 */
-	protected function dateBasedWhere($type, Builder $query, $where)
-	{
-		$value = $this->parameter($where['value']);
-
-		return $type.'('.$this->wrap($where['column']).') '.$where['operator'].' '.$value;
-	}
-
-	/**
 	 * Compile a raw where clause.
 	 *
 	 * @param  \Illuminate\Database\Query\Builder  $query
@@ -497,7 +446,7 @@ class Grammar extends BaseGrammar {
 
 		$parameter = $this->parameter($having['value']);
 
-		return $having['boolean'].' '.$column.' '.$having['operator'].' '.$parameter;
+		return 'and '.$column.' '.$having['operator'].' '.$parameter;
 	}
 
 	/**
@@ -509,11 +458,13 @@ class Grammar extends BaseGrammar {
 	 */
 	protected function compileOrders(Builder $query, $orders)
 	{
-		return 'order by '.implode(', ', array_map(function($order)
+		$me = $this;
+
+		return 'order by '.implode(', ', array_map(function($order) use ($me)
 		{
 			if (isset($order['sql'])) return $order['sql'];
 
-			return $this->wrap($order['column']).' '.$order['direction'];
+			return $me->wrap($order['column']).' '.$order['direction'];
 		}
 		, $orders));
 	}
@@ -666,6 +617,7 @@ class Grammar extends BaseGrammar {
 	 * Compile a delete statement into SQL.
 	 *
 	 * @param  \Illuminate\Database\Query\Builder  $query
+	 * @param  array  $values
 	 * @return string
 	 */
 	public function compileDelete(Builder $query)

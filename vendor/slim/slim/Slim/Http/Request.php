@@ -187,18 +187,16 @@ class Request
      * Fetch GET and POST data
      *
      * This method returns a union of GET and POST data as a key-value array, or the value
-     * of the array key if requested; if the array key does not exist, NULL is returned,
-     * unless there is a default value specified.
+     * of the array key if requested; if the array key does not exist, NULL is returned.
      *
      * @param  string           $key
-     * @param  mixed            $default
      * @return array|mixed|null
      */
-    public function params($key = null, $default = null)
+    public function params($key = null)
     {
         $union = array_merge($this->get(), $this->post());
         if ($key) {
-            return isset($union[$key]) ? $union[$key] : $default;
+            return isset($union[$key]) ? $union[$key] : null;
         }
 
         return $union;
@@ -578,11 +576,10 @@ class Request
      */
     public function getIp()
     {
-        $keys = array('X_FORWARDED_FOR', 'HTTP_X_FORWARDED_FOR', 'CLIENT_IP', 'REMOTE_ADDR');
-        foreach ($keys as $key) {
-            if (isset($this->env[$key])) {
-                return $this->env[$key];
-            }
+        if (isset($this->env['X_FORWARDED_FOR'])) {
+            return $this->env['X_FORWARDED_FOR'];
+        } elseif (isset($this->env['CLIENT_IP'])) {
+            return $this->env['CLIENT_IP'];
         }
 
         return $this->env['REMOTE_ADDR'];
