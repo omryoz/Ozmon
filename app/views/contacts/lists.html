@@ -1,22 +1,28 @@
-<h2>Users</h2>
+<h2>Contacts</h2>
 <table class="table table-condensed">
   <thead>
     <tr>
-      <th>Username</th>
+      <th>ID</th>
       <th>First Name</th>
       <th>Last Name</th>
       <th>Address</th>
+      <th>Mobile</th>
+      <th>Landline</th>
+      <th>Notes</th>
       <th>Options</th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="user in contacts track by user.id">
-      <td>{{user.username}}</td>
-      <td>{{user.first_name}}</td>
-      <td>{{user.last_name}}</td>
-      <td>{{user.address}}</td>
-      <td><a href="#/contacts/edit/{{user.id}}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i></button></td>
+    <tr ng-repeat="contact in contacts track by contact.id">
+      <td>{{contact.id}}</td>
+      <td>{{contact.firstname}}</td>
+      <td>{{contact.lastname}}</td>
+      <td>{{contact.address}}</td>
+      <td>{{contact.mobilenumber}}</td>
+      <td>{{contact.landline}}</td>
+      <td>{{contact.notes}}</td>
+      <td><a href="#/contacts/edit/{{contact.id}}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-pencil"></i></button></td>
     </tr>
   </tbody>
 </table>
-<a class="btn btn-primary" href="#/contacts/add-user">Add New User</a>
+<a class="btn btn-primary" href="#/contacts/add-contact">Add New Contact</a>

@@ -1,26 +1,38 @@
-<h2>Edit user</h2>
+<h2>Edit Contact</h2>
 <div class="row">
   <div class="col-md-6">
-  <form novalidate ng-repeat="user in contacts" name="AddNewForm" id="add-new-form" method="post" action="">
-    <input type="hidden" ng-model="user.id" value="{{user.id}}" />
+  <form novalidate ng-repeat="contact in contacts" name="AddNewForm" id="add-new-form" method="post" action="">
+    <input type="hidden" ng-model="contact.id" value="{{contact.id}}" />
     <div class="form-group">
-      <label for="username">Username:</label>
-      <input class="form-control" type="text" ng-model="user.username" value="{{user.username}}" required />
+      <label for="id">ID:</label>
+      <input class="form-control" type="text" ng-model="contact.id" value="{{contact.id}}" required />
     </div>
     <div class="form-group">
-      <label for="first_name">First name:</label>
-      <input class="form-control" type="text" ng-model="user.first_name" value="{{user.first_name}}" required />
+      <label for="firstname">First name:</label>
+      <input class="form-control" type="text" ng-model="contact.firstname" value="{{contact.firstname}}" required />
     </div>
     <div class="form-group">
-      <label for="last_name">Last name:</label>
-      <input class="form-control" type="text" ng-model="user.last_name" value="{{user.last_name}}" required />
+      <label for="lastname">Last name:</label>
+      <input class="form-control" type="text" ng-model="contact.lastname" value="{{contact.lastname}}" required />
     </div>
     <div class="form-group">
       <label for="address">Address:</label>
-      <input class="form-control" type="text" ng-model="user.address" value="{{user.address}}" />
+      <input class="form-control" type="text" ng-model="contact.address" value="{{contact.address}}" />
     </div>
-    <button class="btn btn-primary" ng-disabled="AddNewForm.$invalid || isUnchanged(user)" id="add-new-btn" ng-click="updateContact(user)">Update <span class="glyphicon glyphicon-floppy-disk"></span></button>
-    <button class="btn btn-danger" ng-click="deleteContact(user)">Delete <span class="glyphicon glyphicon-trash"></span></button>
+    <div class="form-group">
+          <label for="mobilenumber">Mobile:</label>
+          <input class="form-control" type="text" ng-model="contact.mobilenumber" value="{{contact.mobilenumber}}" />
+        </div>
+    <div class="form-group">
+          <label for="landline">Landline:</label>
+          <input class="form-control" type="text" ng-model="contact.landline" value="{{contact.landline}}" />
+        </div>
+    <div class="form-group">
+          <label for="notes">Notes:</label>
+          <input class="form-control" type="text" ng-model="contact.notes" value="{{contact.notes}}" />
+        </div>
+    <button class="btn btn-primary" ng-disabled="AddNewForm.$invalid || isUnchanged(contact)" id="add-new-btn" ng-click="updateContact(contact)">Update <span class="glyphicon glyphicon-floppy-disk"></span></button>
+    <button class="btn btn-danger" ng-click="deleteContact(contact)">Delete <span class="glyphicon glyphicon-trash"></span></button>
     <a href="#/contacts/" class="btn">Cancel</a>
   </form>
 </div>

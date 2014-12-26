@@ -28,8 +28,8 @@
             }
         }
         init();
-        $scope.add_new = function(user, AddNewForm) {
-            contactsFactory.addContact(user)
+        $scope.add_new = function(contact, AddNewForm) {
+            contactsFactory.addContact(contact)
                 .success(function(){
                     $scope.reset();
                     $scope.activePath = $location.path('/contacts/');
@@ -42,29 +42,29 @@
            $scope.sortBy = propName;
            $scope.reverse = !$scope.reverse;
         };
-        $scope.deleteContact = function(user) {
+        $scope.deleteContact = function(contact) {
 
-                console.log(user);
-              var deleteUser = confirm('Are you absolutely sure you want to delete?');
-              if (deleteUser) {
+                console.log(contact);
+              var deleteContact = confirm('Are you absolutely sure you want to delete?');
+              if (deleteContact) {
                   contactsFactory.deleteContact(contactid);
                   $scope.activePath = $location.path('/contacts/');
               }
             };
 
-        $scope.updateContact = function(user){
-              contactsFactory.updateContact(contactid, user)
+        $scope.updateContact = function(contact){
+              contactsFactory.updateContact(contactid, contact)
                   .success(function(data) {
-                      confirm("we are inside");
-                        $scope.users = data;
+                        $scope.contacts = data;
                         $scope.activePath = $location.path('/contacts/');
                   });
+            $scope.activePath = $location.path('/contacts/');
             };
         $scope.reset = function() {
-            $scope.user = angular.copy($scope.master);
+            $scope.contact = angular.copy($scope.master);
         };
-        $scope.isUnchanged = function(user) {
-            return angular.equals(user, $scope.master);
+        $scope.isUnchanged = function(contact) {
+            return angular.equals(contact, $scope.master);
         };
     };
     

@@ -13,19 +13,19 @@ $app = new Slim();
 //$app = new Slim\Slim();
 
 
-$app->get('/users', 'getUsers');
-$app->get('/users/:id', 'getUser');
-$app->post('/add_user', 'addUser');
-$app->put('/users/:id', 'updateUser');
-$app->delete('/users/:id', 'deleteUser');
-$app->get('/test', 'getUsers2');
+$app->get('/contacts', 'getContacts');
+$app->get('/contacts/:id', 'getContact');
+$app->post('/add_contact', 'addContact');
+$app->put('/contacts/:id', 'updateContact');
+$app->delete('/contacts/:id', 'deleteContact');
+$app->get('/test', 'getContacts2');
 $app->run();
 
 
-function getUsers() {
+function getContacts() {
 
 	try {
-		$contacts = User::all();
+		$contacts = Contact::all();
 
 		echo ($contacts);
 	} catch(PDOException $e) {
@@ -33,10 +33,10 @@ function getUsers() {
 	}
 }
 
-function getUsers2() {
+function getContacts2() {
 
     try {
-        $contacts = User::all();
+        $contacts = Contact::all();
 
 
     		echo $contacts;
@@ -44,52 +44,49 @@ function getUsers2() {
     		echo '{"error":{"text":'. $e->getMessage() .'}}';
     	}
 }
-function getUser($id) {
+function getContact($id) {
     try {
-		$contact = User::find($id);
+		$contact = Contact::find($id);
 		echo ($contact);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
 }
 
-function addUser() {
+function addContact() {
 	$request = Slim::getInstance()->request();
-	$userData = json_decode($request->getBody(),true);
+	$contactData = json_decode($request->getBody(),true);
 
 	try {
-		$user = User::create($userData);
-		echo $user;
+		$contact = Contact::create($contactData);
+		echo $contact;
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}';
 	}
 }
 
-function updateUser($id) {
+function updateContact($id) {
 	$request = Slim::getInstance()->request();
-	$user = json_decode($request->getBody());
-	$sql = "UPDATE users SET username=:username, first_name=:first_name, last_name=:last_name, address=:address WHERE id=:id";
+	$contactData = json_decode($request->getBody());
 	try {
-		$db = getConnection();
-		$stmt = $db->prepare($sql);
-		$stmt->bindParam("username", $user->username);
-		$stmt->bindParam("first_name", $user->first_name);
-		$stmt->bindParam("last_name", $user->last_name);
-		$stmt->bindParam("address", $user->address);
-		$stmt->bindParam("id", $id);
-		$stmt->execute();
-		$db = null;
-		echo json_encode($user);
+		$contact = Contact::find($id);
+		foreach ($contactData as $key => $value) {
+			if ($key != 'id' || $value!=$contact->id) {
+				$contact->$key = $value;
+			}
+		}
+		$contact->save();
+		echo json_encode($contact);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}';
 	}
 }
 
-function deleteUser($id) {
+function deleteContact($id) {
 
 	try {
-		$user = User::find($id);
-		echo $user->delete();
+		$contact = Contact::find($id);
+		echo $contact->delete();
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
@@ -100,7 +97,7 @@ function getConnection() {
 	$dbuser="root";
 	$dbpass="";
 	$dbname="ozmon";
-	$dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);	
+	$dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	return $dbh;
 }

@@ -9,7 +9,10 @@ class Contact extends Eloquent {
 	 *
 	 * @var string
 	 */
+	public $timestamps = false;
+	public $incrementing = false;
 	protected $table = 'contacts';
+	protected $fillable = ['id','firstname','lastname','address','mobilenumber','landline'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.
