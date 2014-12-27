@@ -10,6 +10,10 @@
 
             return $http.get('api/contacts');
         };
+        factory.getContactAttributes = function() {
+
+            return $http.get('api/contacts/getAttributes')
+        };
 
         factory.getContact = function(contactId) {
             return $http.get('api/contacts/' + contactId);

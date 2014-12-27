@@ -6,8 +6,17 @@
         $scope.master = {};
         $scope.activePath = null;
         $scope.contacts = [];
+        $scope.contactAttributes = [];
         var contactid = (typeof $routeParams.id != 'undefined') ? $routeParams.id : null ;
         function init() {
+            //contactsFactory.getContactAttributes()
+            //    .success(function(attributes) {
+            //        $scope.contactAttributes = attributes;
+            //    })
+            //    .error(function(data, status, headers, config) {
+            //        $log.log(data.error + ' ' + status);
+            //    });
+            //
             if (contactid == null) {
             contactsFactory.getContacts()
                 .success(function(contacts) {

@@ -12,7 +12,13 @@ class Contact extends Eloquent {
 	public $timestamps = false;
 	public $incrementing = false;
 	protected $table = 'contacts';
-	protected $fillable = ['id','firstname','lastname','address','mobilenumber','landline'];
+	protected  $fillable = ['id','firstname','lastname','address','mobilenumber','landline','notes'];
+
+	public function getColumns(){
+
+			return $this->fillable;
+	}
+
 
 	/**
 	 * The attributes excluded from the model's JSON form.

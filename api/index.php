@@ -9,18 +9,19 @@
 
 require __DIR__.'/../vendor/autoload.php';
 use \Slim\Slim AS Slim;
+
+
 $app = new Slim();
 //$app = new Slim\Slim();
 
-
-$app->get('/contacts', 'getContacts');
+$app->get('/contacts', 'getContacts'); //returns all contacts
+$app->get('/contacts/getAttributes', 'getAttributes');
 $app->get('/contacts/:id', 'getContact');
 $app->post('/add_contact', 'addContact');
 $app->put('/contacts/:id', 'updateContact');
 $app->delete('/contacts/:id', 'deleteContact');
 $app->get('/test', 'getContacts2');
 $app->run();
-
 
 function getContacts() {
 
@@ -36,10 +37,19 @@ function getContacts() {
 function getContacts2() {
 
     try {
-        $contacts = Contact::all();
+		$contact = new Contact();
+		$columns= $contact->getColumns();
+    		echo json_encode($columns);
+    	} catch(PDOException $e) {
+    		echo '{"error":{"text":'. $e->getMessage() .'}}';
+    	}
+}
+function getAttributes() {
 
-
-    		echo $contacts;
+    try {
+		$contact = new Contact();
+		$columns= $contact->getColumns();
+    		echo json_encode($columns);
     	} catch(PDOException $e) {
     		echo '{"error":{"text":'. $e->getMessage() .'}}';
     	}

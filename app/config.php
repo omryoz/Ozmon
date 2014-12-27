@@ -17,7 +17,11 @@ $capsule->addConnection(array(
     'collation' => 'utf8_general_ci',
     'prefix'    => ''
 ));
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
+$capsule->setEventDispatcher(new Dispatcher(new Container));
 
+// Make this Capsule instance available globally via static methods... (optional)
 $capsule->setAsGlobal();
 
 $capsule->bootEloquent();
