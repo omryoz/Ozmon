@@ -1,7 +1,7 @@
 (function() {
     
     var ContactsController = function ($scope, $location, $routeParams, $log, $window, contactsFactory) {
-        $scope.sortBy = 'name';
+        $scope.sortBy = 'firstname';
         $scope.reverse = false;
         $scope.master = {};
         $scope.activePath = null;
@@ -17,6 +17,7 @@
             //        $log.log(data.error + ' ' + status);
             //    });
             //
+
             if (contactid == null) {
             contactsFactory.getContacts()
                 .success(function(contacts) {
@@ -37,6 +38,10 @@
             }
         }
         init();
+        $scope.doSort = function(propName) {
+           $scope.sortBy = propName;
+           $scope.reverse = !$scope.reverse;
+        };
         $scope.add_new = function(contact, AddNewForm) {
             contactsFactory.addContact(contact)
                 .success(function(){
@@ -47,10 +52,7 @@
             $scope.reset();
         };
 
-        $scope.doSort = function(propName) {
-           $scope.sortBy = propName;
-           $scope.reverse = !$scope.reverse;
-        };
+
         $scope.deleteContact = function(contact) {
 
                 console.log(contact);

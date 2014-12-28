@@ -36,13 +36,14 @@ function getContacts() {
 
 function getContacts2() {
 
-    try {
-		$contact = new Contact();
-		$columns= $contact->getColumns();
-    		echo json_encode($columns);
-    	} catch(PDOException $e) {
-    		echo '{"error":{"text":'. $e->getMessage() .'}}';
-    	}
+	try {
+		$contacts = Contact::all();
+
+		echo ($contacts);
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}';
+	}
+
 }
 function getAttributes() {
 

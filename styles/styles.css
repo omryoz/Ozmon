@@ -1,9 +1,20 @@
 .headers {
-    margin-top: 50px;
-    display:inline-table;
-    margin-right: 70% ;
+
+    display: inline;
+
 }
 .buttons {
-
+    margin-left: 50% ;
     float: inherit;
+}
+.filter {
+    float: inherit;
+}
+.table-nav {
+
+    margin-top: 2%;
+}
+.table-container {
+    padding-top: 5%;
+
 }

@@ -1,21 +1,30 @@
-
-<h2 class="headers">Contacts</h2>
-  <a class="btn btn-primary buttons" href="#/contacts/add-contact">Add New Contact</a>
-<table class="table table-condensed">
+<div class="table-nav">
+<div class="col-xs-6 col-md-4"><h2 class="headers">Contacts</h2></div>
+<div class="col-xs-6 col-md-4">
+  <div class="input-group filter">
+    <span class="input-group-addon">
+        <i class="glyphicon glyphicon-search"></i></span>
+    <input type="text" ng-model="contactFilter" class="form-control" />
+    </div>
+</div>
+<div class="col-xs-6 col-md-4"><a class="btn btn-primary buttons" href="#/contacts/add-contact">Add New Contact</a></div>
+</div>
+<div class="table-container">
+<table class="table table-condensed" >
   <thead>
     <tr>
-      <th>ID</th>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Address</th>
-      <th>Mobile</th>
-      <th>Landline</th>
+      <th ng-click="doSort('id')">ID</th>
+      <th ng-click="doSort('firstname')">First Name</th>
+      <th ng-click="doSort('lastname')">Last Name</th>
+      <th ng-click="doSort('address')">Address</th>
+      <th ng-click="doSort('mobilenumber')">Mobile</th>
+      <th ng-click="doSort('landline')">Landline</th>
       <th>Notes</th>
       <th>Options</th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="contact in contacts track by contact.id">
+    <tr ng-repeat="contact in contacts | filter:contactFilter | orderBy:sortBy:reverse" class="repeat-animation">
       <td>{{contact.id}}</td>
       <td>{{contact.firstname}}</td>
       <td>{{contact.lastname}}</td>
@@ -27,3 +36,4 @@
     </tr>
   </tbody>
 </table>
+</div>
